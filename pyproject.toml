@@ -12,6 +12,7 @@ python = ">=3.11,<3.13"
 langchain = "^0.3.19"
 langchain-openai = "^0.3.6"
 python-dotenv = "^1.0.1"
+langchain-cohere = "^0.4.2"
 
 [tool.poetry.group.development.dependencies]
 pytest = "^7.2"
