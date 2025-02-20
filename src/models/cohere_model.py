@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 from langchain.chat_models import init_chat_model
+from langchain.schema import SystemMessage, HumanMessage
 
 load_dotenv()
 
@@ -13,5 +14,17 @@ cohere_model = init_chat_model(
     cohere_api_key=cohere_api_key
 )
 
-# print("Cohere model: " + cohere_model.invoke("what's your name").content + "\n")
-print("Model name: " + cohere_model.model_name)
+system_prompt = SystemMessage(content="You are a helpful assistant named Doctor Sebastian.")
+
+# Build the conversation history with previous messages
+message_history = [
+    system_prompt,
+    HumanMessage(content="Hello, what's your name?")
+]
+
+# Call the model with the history
+response = cohere_model.invoke(message_history)
+print(response.content)
+
+
+# print("Model name: " + cohere_model.model_name)
