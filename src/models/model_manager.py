@@ -1,5 +1,5 @@
-from openai_config import openai_model
-from cohere_config import cohere_model
+from src.models.openai_config import openai_model
+from src.models.cohere_config import cohere_model
 
 
 class ModelManager:
