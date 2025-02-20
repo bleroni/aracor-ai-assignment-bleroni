@@ -9,8 +9,9 @@ packages = [{ include = "aracor_ai" }]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.13"
-# Add your runtime dependencies here
-# e.g., requests = "^2.28.1"
+langchain = "^0.3.19"
+langchain-openai = "^0.3.6"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.group.development.dependencies]
 pytest = "^7.2"
