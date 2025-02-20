@@ -13,6 +13,8 @@ langchain = "^0.3.19"
 langchain-openai = "^0.3.6"
 python-dotenv = "^1.0.1"
 langchain-cohere = "^0.4.2"
+pdfplumber = "^0.11.5"
+python-docx = "^1.1.2"
 
 [tool.poetry.group.development.dependencies]
 pytest = "^7.2"
