@@ -9,9 +9,6 @@ from langchain.chat_models import init_chat_model
 
 from src.utils.rate_limiting import rate_limiter
 
-# from langchain.schema import SystemMessage, HumanMessage
-
-
 load_dotenv()
 
 cohere_api_key = os.getenv("COHERE_API_KEY")
@@ -27,13 +24,3 @@ cohere_model = init_chat_model(
     rate_limiter=rate_limiter,
     max_retries=5,
 )
-
-# system_prompt = SystemMessage(content="You are a helpful assistant named Doctor Sebastian.")
-
-# message_history = [
-#     system_prompt,
-#     HumanMessage(content="Hello, what's your name?")
-# ]
-
-# response = cohere_model.invoke(message_history)
-# print(response.content)
