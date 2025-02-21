@@ -5,6 +5,7 @@ Module for configuring and initializing the OpenAI model.
 import os
 from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
+
 # from langchain.schema import SystemMessage, HumanMessage
 
 from src.utils.rate_limiting import rate_limiter
@@ -16,12 +17,12 @@ if not openai_api_key:
     raise ValueError("OPENAI_API_KEY environment variable is not set")
 
 openai_model = init_chat_model(
-  "gpt-4o",
-  model_provider="openai",
-  temperature=0,
-  openai_api_key=openai_api_key,
-  rate_limiter=rate_limiter,
-  max_retries=5,
+    "gpt-4o",
+    model_provider="openai",
+    temperature=0,
+    openai_api_key=openai_api_key,
+    rate_limiter=rate_limiter,
+    max_retries=5,
 )
 
 # system_prompt = SystemMessage(content="You are a helpful assistant named Doctor Green.")

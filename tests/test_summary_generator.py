@@ -36,7 +36,7 @@ def test_detailed_summary_generation(summary_generator):
     result = summary_generator.generate_summary(text, "detailed")
     assert isinstance(result, str)
     assert len(result) > 0
-    assert "detailed" in summary_generator.model_manager.default_client.invoke.call_args[0][0][0].content.lower() # noqa
+    assert "detailed" in summary_generator.model_manager.default_client.invoke.call_args[0][0][0].content.lower()  # noqa
 
 
 def test_bullet_point_summary_generation(summary_generator):
@@ -44,7 +44,7 @@ def test_bullet_point_summary_generation(summary_generator):
     result = summary_generator.generate_summary(text, "bullet")
     assert isinstance(result, str)
     assert len(result) > 0
-    assert "bullet" in summary_generator.model_manager.default_client.invoke.call_args[0][0][0].content.lower() # noqa
+    assert "bullet" in summary_generator.model_manager.default_client.invoke.call_args[0][0][0].content.lower()  # noqa
 
 
 @pytest.mark.asyncio

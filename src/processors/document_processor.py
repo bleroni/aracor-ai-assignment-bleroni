@@ -21,7 +21,7 @@ class DocumentProcessor:
     # pylint: disable=too-few-public-methods
     """Processes document files to extract text from supported formats."""
 
-    SUPPORTED_FORMATS = ['pdf', 'txt', 'docx']
+    SUPPORTED_FORMATS = ["pdf", "txt", "docx"]
 
     def __init__(self):
         self.base_dir = "src/documents"
@@ -40,7 +40,7 @@ class DocumentProcessor:
         file_ext = self._get_file_extension(file_path)
 
         if file_ext not in self.SUPPORTED_FORMATS:
-            raise UnsupportedFormatError(f"Unsupported file format: {file_ext}") # noqa
+            raise UnsupportedFormatError(f"Unsupported file format: {file_ext}")  # noqa
 
         try:
             if file_ext == "pdf":
@@ -58,7 +58,7 @@ class DocumentProcessor:
     def _get_file_extension(self, file_path):
         """Extract and normalize file extension"""
         _, ext = os.path.splitext(file_path)
-        return ext.lower().lstrip('.')
+        return ext.lower().lstrip(".")
 
     def _extract_pdf_text(self, file_path):
         """Extract text from PDF using pdfplumber"""
@@ -66,7 +66,7 @@ class DocumentProcessor:
             pdf_text = ""
             with pdfplumber.open(file_path) as pdf:
                 for page in pdf.pages:
-                    pdf_text += page.extract_text() or ''
+                    pdf_text += page.extract_text() or ""
             return pdf_text
         except Exception as e:
             raise CorruptedFileError(f"PDF processing error: {str(e)}") from e
@@ -74,7 +74,7 @@ class DocumentProcessor:
     def _extract_txt_text(self, file_path):
         """Extract text from plain text file"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 return f.read()
         except Exception as e:
             raise CorruptedFileError(f"Text file processing error: {str(e)}") from e
@@ -83,7 +83,7 @@ class DocumentProcessor:
         """Extract text from DOCX using python-docx"""
         try:
             doc = Document(file_path)
-            return '\n'.join([para.text for para in doc.paragraphs])
+            return "\n".join([para.text for para in doc.paragraphs])
         except PackageNotFoundError as e:
             raise CorruptedFileError("Invalid or corrupted DOCX file") from e
         except Exception as e:

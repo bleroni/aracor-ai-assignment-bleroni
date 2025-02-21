@@ -18,6 +18,7 @@ class SummaryGenerator:
     - detailed: A detailed summary with key points
     - bullet: A bullet point summary
     """
+
     def __init__(self, model_manager: ModelManager, chunk_size: int = 4000, timeout: int = 30):
         """Initialize SummaryGenerator with ModelManager and configuration."""
         self.model_manager = model_manager
@@ -26,7 +27,7 @@ class SummaryGenerator:
         self.summary_types = {
             "brief": "Provide a concise summary (2-3 sentences)",
             "detailed": "Provide a detailed summary with key points",
-            "bullet": "Provide a summary in bullet point format"
+            "bullet": "Provide a summary in bullet point format",
         }
 
     def _chunk_text(self, text: str) -> list[str]:
@@ -64,16 +65,12 @@ class SummaryGenerator:
 
         try:
             response = await asyncio.wait_for(
-                self.model_manager.default_client.ainvoke([
-                    HumanMessage(content=prompt)
-                ]),
-                timeout=self.timeout
+                self.model_manager.default_client.ainvoke([HumanMessage(content=prompt)]), timeout=self.timeout  # pylint: disable=line-too-long  # "black" is reformatting these lines
             )
             return response.content
         except asyncio.TimeoutError:
             return (
-                f"[Partial Result - Timeout after {self.timeout}s]: "
-                f"{textwrap.shorten(chunk, width=100, placeholder='...')}"
+                f"[Partial Result - Timeout after {self.timeout}s]: " f"{textwrap.shorten(chunk, width=100, placeholder='...')}"  # pylint: disable=line-too-long  # "black" is reformatting these lines
             )
 
     async def _summarize_chunks(self, chunks: list[str], summary_type: str) -> list[str]:
@@ -84,20 +81,16 @@ class SummaryGenerator:
     def generate_summary(self, text: str, summary_type: str = "brief") -> str:
         """Generate summary of the input text with specified type."""
         if summary_type not in self.summary_types:
-            raise ValueError(
-                f"Invalid summary type. "
-                f"Choose from: "
-                f"{list(self.summary_types.keys())}"
-            )
+            raise ValueError(f"Invalid summary type. " f"Choose from: " f"{list(self.summary_types.keys())}")  # pylint: disable=line-too-long  # "black" is reformatting these lines
 
         # Chunk the text
         chunks = self._chunk_text(text)
 
         # If single chunk, process synchronously for simplicity
         if len(chunks) == 1:
-            response = self.model_manager.default_client.invoke([
-                HumanMessage(content=f"{self.summary_types[summary_type]}:\n\n{chunks[0]}")
-            ])
+            response = self.model_manager.default_client.invoke(
+                [HumanMessage(content=f"{self.summary_types[summary_type]}:\n\n{chunks[0]}")]
+            )
             return response.content
 
         # Process multiple chunks asynchronously

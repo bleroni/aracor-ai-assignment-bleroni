@@ -9,3 +9,6 @@
 
 ## Running pylint
 `poetry run pylint src/`
+
+## Running black
+`poetry run black .`

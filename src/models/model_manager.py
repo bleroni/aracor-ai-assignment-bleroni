@@ -16,6 +16,7 @@ class ModelManager:
         client2: Instance of the Cohere model client.
         default_client: The current default client used for invoking models.
     """
+
     def __init__(self):
         """Initializes the ModelManager with default model clients."""
         self.client1 = openai_model

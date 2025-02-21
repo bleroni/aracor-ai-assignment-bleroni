@@ -71,7 +71,7 @@ def test_api_key_validation(monkeypatch):
 
 def test_model_switching():
     """
-    Test that ModelManager switches models correctly and that call_model() 
+    Test that ModelManager switches models correctly and that call_model()
     prints the expected dummy responses.
     """
     from src.models.model_manager import ModelManager

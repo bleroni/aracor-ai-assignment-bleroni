@@ -5,6 +5,7 @@ Module for configuring and initializing the Cohere model.
 import os
 from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
+
 # from langchain.schema import SystemMessage, HumanMessage
 
 from src.utils.rate_limiting import rate_limiter
@@ -16,7 +17,7 @@ if not cohere_api_key:
     raise ValueError("COHERE_API_KEY environment variable is not set")
 
 cohere_model = init_chat_model(
-    "command",             # the Cohere model name
+    "command",  # the Cohere model name
     model_provider="cohere",
     temperature=0,
     cohere_api_key=cohere_api_key,

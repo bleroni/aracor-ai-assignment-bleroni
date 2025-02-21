@@ -1,7 +1,5 @@
 import pytest
-from src.processors.document_processor import (
-    DocumentProcessor, UnsupportedFormatError, CorruptedFileError
-)
+from src.processors.document_processor import DocumentProcessor, UnsupportedFormatError, CorruptedFileError
 from docx import Document as DocxDocument
 
 
