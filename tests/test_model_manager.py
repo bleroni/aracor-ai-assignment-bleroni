@@ -1,23 +1,21 @@
 import io
-import pytest
-
 from contextlib import redirect_stdout
 from importlib import reload
-from pydantic import BaseModel, ConfigDict, Field
-from typing import List, Optional, Any, Sequence
+from typing import Any, List, Optional, Sequence
 
+import pytest
 from langchain.chat_models.base import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
 from langchain_core.prompt_values import PromptValue
 from langchain_core.runnables import RunnableConfig
-
+from pydantic import BaseModel, ConfigDict, Field
 
 import src.models.anthropic_config as anthropic_config
 import src.models.cohere_config as cohere_config
 import src.models.openai_config as openai_config
-
 from src.models.anthropic_config import anthropic_model
+
 # from src.models.cohere_config import cohere_model
 from src.models.model_manager import ModelManager
 from src.models.openai_config import openai_model
@@ -42,11 +40,7 @@ class DummyClient(BaseChatModel):
     )
 
     def _generate(
-        self,
-        messages: List[BaseMessage],
-        stop: Optional[List[str]] = None,
-        run_manager: Optional[Any] = None,
-        **kwargs: Any
+        self, messages: List[BaseMessage], stop: Optional[List[str]] = None, run_manager: Optional[Any] = None, **kwargs: Any
     ) -> ChatResult:
         if self.raise_exception:
             raise Exception("Simulated API error")
@@ -59,12 +53,7 @@ class DummyClient(BaseChatModel):
     def _llm_type(self) -> str:
         return "dummy_client"
 
-    def invoke(
-        self,
-        input: Any,
-        config: Optional[Any] = None,
-        **kwargs: Any
-    ) -> BaseMessage:
+    def invoke(self, input: Any, config: Optional[Any] = None, **kwargs: Any) -> BaseMessage:
         if self.raise_exception:
             raise Exception("Simulated API error")
         return AIMessage(content=self.response_content)

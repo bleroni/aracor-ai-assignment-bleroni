@@ -135,27 +135,27 @@ if __name__ == "__main__":
     # Generate different types of summaries
     try:
         # Brief summary
-        brief = summarizer.generate_summary(SAMPLE_TEXT, "brief")
+        BRIEF = summarizer.generate_summary(SAMPLE_TEXT, "brief")
         print("Brief Summary:")
-        print(brief)
+        print(BRIEF)
         print("\n")
 
         # Detailed summary
-        detailed = summarizer.generate_summary(SAMPLE_TEXT, "detailed")
+        DETAILED = summarizer.generate_summary(SAMPLE_TEXT, "detailed")
         print("Detailed Summary:")
-        print(detailed)
+        print(DETAILED)
         print("\n")
 
         # Bullet point summary
-        bullet = summarizer.generate_summary(SAMPLE_TEXT, "bullet")
+        BULLET = summarizer.generate_summary(SAMPLE_TEXT, "bullet")
         print("Bullet Point Summary:")
-        print(bullet)
+        print(BULLET)
 
         # Switch model and try again
-        summarizer.set_model("cohere")
-        print("\nSwitching to Cohere model:")
-        brief_cohere = summarizer.generate_summary(SAMPLE_TEXT, "brief")
-        print(brief_cohere)
+        summarizer.set_model("anthropic")
+        print("\nSwitching to Anthropic model:")
+        BRIEF_ANTHROPIC = summarizer.generate_summary(SAMPLE_TEXT, "brief")
+        print(BRIEF_ANTHROPIC)
 
     except Exception as e:  # pylint: disable=W0718
         print(f"Error: {str(e)}")
