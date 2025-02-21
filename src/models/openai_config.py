@@ -8,6 +8,8 @@ from src.utils.rate_limiting import rate_limiter
 load_dotenv()
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable is not set")
 
 openai_model = init_chat_model(
   "gpt-4o",
