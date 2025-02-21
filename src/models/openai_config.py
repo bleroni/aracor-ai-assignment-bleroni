@@ -21,6 +21,7 @@ if not openai_api_key:
 openai_model = init_chat_model(
     "gpt-4o",
     model_provider="openai",
+    name="gpt-4o",
     temperature=0,
     openai_api_key=openai_api_key,
     rate_limiter=rate_limiter,

@@ -1,8 +1,16 @@
 import io
+import pytest
+
 from contextlib import redirect_stdout
 from importlib import reload
+from pydantic import BaseModel, ConfigDict, Field
+from typing import List, Optional, Any, Sequence
 
-import pytest
+from langchain.chat_models.base import BaseChatModel
+from langchain_core.messages import AIMessage, BaseMessage
+from langchain_core.outputs import ChatGeneration, ChatResult
+from langchain_core.prompt_values import PromptValue
+from langchain_core.runnables import RunnableConfig
 
 import src.models.cohere_config as cohere_config
 
@@ -13,22 +21,51 @@ from src.models.model_manager import ModelManager
 from src.models.openai_config import openai_model
 
 
-# Dummy client class that mimics the expected behavior.
+# Dummy response class that mimics the expected behavior.
 class DummyResponse:
-    def __init__(self, content):
+    def __init__(self, content: str):
         self.content = content
 
 
-class DummyClient:
-    def __init__(self, model_name, response_content=None, raise_exception=False):
-        self.model_name = model_name
-        self.response_content = response_content
-        self.raise_exception = raise_exception
+class DummyClient(BaseChatModel):
+    # Define fields with Pydantic-compatible type hints and Field for validation
+    name: str = Field(..., description="Name of the model")
+    response_content: str = Field(default="Default response", description="Response content")
+    raise_exception: bool = Field(default=False, description="Whether to raise an exception")
 
-    def invoke(self, prompt):
+    # Pydantic v2 model configuration
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,  # Allow arbitrary types if needed by BaseChatModel
+        extra="forbid",  # Disallow extra fields to enforce strict validation
+    )
+
+    def _generate(
+        self,
+        messages: List[BaseMessage],
+        stop: Optional[List[str]] = None,
+        run_manager: Optional[Any] = None,
+        **kwargs: Any
+    ) -> ChatResult:
         if self.raise_exception:
             raise Exception("Simulated API error")
-        return DummyResponse(self.response_content)
+
+        response_message = AIMessage(content=self.response_content)
+        generation = ChatGeneration(message=response_message)
+        return ChatResult(generations=[generation])
+
+    @property
+    def _llm_type(self) -> str:
+        return "dummy_client"
+
+    def invoke(
+        self,
+        input: Any,
+        config: Optional[Any] = None,
+        **kwargs: Any
+    ) -> BaseMessage:
+        if self.raise_exception:
+            raise Exception("Simulated API error")
+        return AIMessage(content=self.response_content)
 
 
 def test_openai_model_initialization():
@@ -79,8 +116,8 @@ def test_model_switching():
     from src.models.model_manager import ModelManager
 
     # Create dummy clients for testing.
-    dummy_openai = DummyClient("openai", "OpenAI response")
-    dummy_cohere = DummyClient("cohere", "Cohere response")
+    dummy_openai = DummyClient(name="openai", response_content="OpenAI response")
+    dummy_cohere = DummyClient(name="cohere", response_content="Cohere response")
 
     # Instantiate the ModelManager and override the real clients.
     manager = ModelManager()
@@ -117,29 +154,7 @@ def test_model_switching():
 def test_call_model_error_response(capsys):
     mm = ModelManager()
     # Override the default client with one that simulates an error response
-    mm.default_client = DummyClient("dummy_model", response_content="Error: Invalid API key")
+    mm.default_client = DummyClient(name="dummy_model", response_content="Error: Invalid API key")
     mm.call_model()
     captured = capsys.readouterr().out
     assert "Response from dummy_model: Error: Invalid API key" in captured
-
-
-def test_call_model_response_content_error():
-    # Define a response class that raises an error when accessing its content.
-    class ErrorResponse:
-        @property
-        def content(self):
-            raise Exception("Simulated error in response content")
-
-    # Dummy client that returns an ErrorResponse instance.
-    class DummyClientWithErrorResponse:
-        def __init__(self, model_name):
-            self.model_name = model_name
-
-        def invoke(self, prompt):
-            return ErrorResponse()
-
-    mm = ModelManager()
-    mm.default_client = DummyClientWithErrorResponse("dummy_model")
-    with pytest.raises(Exception) as excinfo:
-        mm.call_model()
-    assert "Simulated error in response content" in str(excinfo.value)

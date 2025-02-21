@@ -3,6 +3,7 @@
 This module provides the ModelManager class, which allows you to switch between
 different model clients (OpenAI and Cohere) and invoke the default client.
 """
+# from langchain.chat_models.base import BaseChatModel
 
 from src.models.cohere_config import cohere_model
 from src.models.openai_config import openai_model
@@ -45,7 +46,7 @@ class ModelManager:
         Sends a query to the default client and prints response and model name.
         """
         resp = self.default_client.invoke("what's your name").content
-        print(f"Response from {self.default_client.model_name}: {resp}")
+        print(f"Response from {self.default_client.name}: {resp}")
 
 
 if __name__ == "__main__":

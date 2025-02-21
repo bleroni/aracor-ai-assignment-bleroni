@@ -2,6 +2,8 @@
 
 ## Running locally
 `poetry install --with development`
+
+## Executing individual files
 `poetry run python -m src.models.openai_config`
 
 ## Running tests
@@ -19,3 +21,7 @@
 ## Runing isort
 `poetry add --dev isort`
 `poetry run isort .`
+
+## Running mypy
+`poetry add --dev mypy`
+`poetry run mypy .`

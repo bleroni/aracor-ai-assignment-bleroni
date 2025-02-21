@@ -69,7 +69,7 @@ class SummaryGenerator:
                 self.model_manager.default_client.ainvoke([HumanMessage(content=prompt)]),
                 timeout=self.timeout,  # pylint: disable=line-too-long  # "black" is reformatting these lines
             )
-            return response.content
+            return str(response.content)
         except asyncio.TimeoutError:
             return (
                 f"[Partial Result - Timeout after {self.timeout}s]: "
@@ -96,7 +96,7 @@ class SummaryGenerator:
             response = self.model_manager.default_client.invoke(
                 [HumanMessage(content=f"{self.summary_types[summary_type]}:\n\n{chunks[0]}")]
             )
-            return response.content
+            return str(response.content)
 
         # Process multiple chunks asynchronously
         summaries = asyncio.run(self._summarize_chunks(chunks, summary_type))
@@ -109,7 +109,7 @@ class SummaryGenerator:
 
         return combined
 
-    def set_model(self, model_name: str):
+    def set_model(self, model_name: str) -> None:
         """Switch the underlying model."""
         self.model_manager.switch_client(model_name)
 

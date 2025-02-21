@@ -21,6 +21,7 @@ if not cohere_api_key:
 cohere_model = init_chat_model(
     "command",  # the Cohere model name
     model_provider="cohere",
+    name="command",
     temperature=0,
     cohere_api_key=cohere_api_key,
     rate_limiter=rate_limiter,
