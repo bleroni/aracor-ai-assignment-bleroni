@@ -6,6 +6,7 @@ import asyncio
 import textwrap
 
 from langchain.schema import HumanMessage
+
 from src.models.model_manager import ModelManager
 
 
@@ -65,12 +66,14 @@ class SummaryGenerator:
 
         try:
             response = await asyncio.wait_for(
-                self.model_manager.default_client.ainvoke([HumanMessage(content=prompt)]), timeout=self.timeout  # pylint: disable=line-too-long  # "black" is reformatting these lines
+                self.model_manager.default_client.ainvoke([HumanMessage(content=prompt)]),
+                timeout=self.timeout,  # pylint: disable=line-too-long  # "black" is reformatting these lines
             )
             return response.content
         except asyncio.TimeoutError:
             return (
-                f"[Partial Result - Timeout after {self.timeout}s]: " f"{textwrap.shorten(chunk, width=100, placeholder='...')}"  # pylint: disable=line-too-long  # "black" is reformatting these lines
+                f"[Partial Result - Timeout after {self.timeout}s]: "
+                f"{textwrap.shorten(chunk, width=100, placeholder='...')}"  # pylint: disable=line-too-long  # "black" is reformatting these lines
             )
 
     async def _summarize_chunks(self, chunks: list[str], summary_type: str) -> list[str]:
@@ -81,7 +84,9 @@ class SummaryGenerator:
     def generate_summary(self, text: str, summary_type: str = "brief") -> str:
         """Generate summary of the input text with specified type."""
         if summary_type not in self.summary_types:
-            raise ValueError(f"Invalid summary type. " f"Choose from: " f"{list(self.summary_types.keys())}")  # pylint: disable=line-too-long  # "black" is reformatting these lines
+            raise ValueError(
+                f"Invalid summary type. " f"Choose from: " f"{list(self.summary_types.keys())}"
+            )  # pylint: disable=line-too-long  # "black" is reformatting these lines
 
         # Chunk the text
         chunks = self._chunk_text(text)

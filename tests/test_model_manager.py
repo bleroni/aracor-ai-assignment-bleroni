@@ -1,14 +1,16 @@
-import pytest
 import io
 from contextlib import redirect_stdout
 from importlib import reload
 
+import pytest
+
+import src.models.cohere_config as cohere_config
+
 # Import the configuration modules so we can test API key loading.
 import src.models.openai_config as openai_config
-import src.models.cohere_config as cohere_config
+from src.models.cohere_config import cohere_model
 from src.models.model_manager import ModelManager
 from src.models.openai_config import openai_model
-from src.models.cohere_config import cohere_model
 
 
 # Dummy client class that mimics the expected behavior.

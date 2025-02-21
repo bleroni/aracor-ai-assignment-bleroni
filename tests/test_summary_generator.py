@@ -1,9 +1,11 @@
 # test_summary_generator.py
-import pytest
 import asyncio
-from unittest.mock import Mock, AsyncMock
-from src.models.summary import SummaryGenerator
+from unittest.mock import AsyncMock, Mock
+
+import pytest
+
 from src.models.model_manager import ModelManager
+from src.models.summary import SummaryGenerator
 
 
 @pytest.fixture

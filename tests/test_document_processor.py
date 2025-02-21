@@ -1,6 +1,7 @@
 import pytest
-from src.processors.document_processor import DocumentProcessor, UnsupportedFormatError, CorruptedFileError
 from docx import Document as DocxDocument
+
+from src.processors.document_processor import CorruptedFileError, DocumentProcessor, UnsupportedFormatError
 
 
 # 1. Test successful PDF processing

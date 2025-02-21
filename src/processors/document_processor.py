@@ -4,6 +4,7 @@ Supports PDF, TXT, and DOCX files.
 """
 
 import os
+
 import pdfplumber
 from docx import Document
 from docx.opc.exceptions import PackageNotFoundError

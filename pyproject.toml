@@ -19,7 +19,7 @@ python-docx = "^1.1.2"
 [tool.poetry.group.development.dependencies]
 pytest = "^8.2"
 black = "^25.1"
-isort = "^5.12"
+isort = "^6.0"
 mypy = "^1.5"
 pylint = "^3.3.4"
 # Add any other development tools as needed
@@ -29,6 +29,7 @@ pylint = "^3.3.4"
 pytest-asyncio = "^0.25.3"
 pylint = "^3.3.4"
 black = "^25.1.0"
+isort = "^6.0.0"
 
 [tool.black]
 line-length = 130

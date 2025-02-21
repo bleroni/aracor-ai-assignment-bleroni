@@ -4,8 +4,8 @@ This module provides the ModelManager class, which allows you to switch between
 different model clients (OpenAI and Cohere) and invoke the default client.
 """
 
-from src.models.openai_config import openai_model
 from src.models.cohere_config import cohere_model
+from src.models.openai_config import openai_model
 
 
 class ModelManager:
