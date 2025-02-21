@@ -1,7 +1,11 @@
-from dotenv import load_dotenv
+"""
+Module for configuring and initializing the Cohere model.
+"""
+
 import os
+from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
-from langchain.schema import SystemMessage, HumanMessage
+# from langchain.schema import SystemMessage, HumanMessage
 
 from src.utils.rate_limiting import rate_limiter
 

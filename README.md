@@ -6,3 +6,6 @@
 
 ## Running tests
 `poetry run pytest -v`
+
+## Running pylint
+`poetry run pylint src/`

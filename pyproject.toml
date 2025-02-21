@@ -21,12 +21,13 @@ pytest = "^8.2"
 black = "^23.1"
 isort = "^5.12"
 mypy = "^1.5"
-pylint = "^2.16"
+pylint = "^3.3.4"
 # Add any other development tools as needed
 
 
 [tool.poetry.group.dev.dependencies]
 pytest-asyncio = "^0.25.3"
+pylint = "^3.3.4"
 
 [tool.black]
 line-length = 130

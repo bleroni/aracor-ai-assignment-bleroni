@@ -1,3 +1,8 @@
+"""
+Module for processing various document formats and extracting text content.
+Supports PDF, TXT, and DOCX files.
+"""
+
 import os
 import pdfplumber
 from docx import Document
@@ -6,15 +11,16 @@ from docx.opc.exceptions import PackageNotFoundError
 
 class UnsupportedFormatError(Exception):
     """Raised when an unsupported file format is encountered"""
-    pass
 
 
 class CorruptedFileError(Exception):
     """Raised when a file is corrupted or cannot be processed"""
-    pass
 
 
 class DocumentProcessor:
+    # pylint: disable=too-few-public-methods
+    """Processes document files to extract text from supported formats."""
+
     SUPPORTED_FORMATS = ['pdf', 'txt', 'docx']
 
     def __init__(self):
@@ -31,18 +37,21 @@ class DocumentProcessor:
             UnsupportedFormatError: For unsupported file formats
             CorruptedFileError: For corrupted or unreadable files
         """
-        file_extension = self._get_file_extension(file_path)
+        file_ext = self._get_file_extension(file_path)
 
-        if file_extension not in self.SUPPORTED_FORMATS:
-            raise UnsupportedFormatError(f"Unsupported file format: {file_extension}") # noqa
+        if file_ext not in self.SUPPORTED_FORMATS:
+            raise UnsupportedFormatError(f"Unsupported file format: {file_ext}") # noqa
 
         try:
-            if file_extension == "pdf":
+            if file_ext == "pdf":
                 return self._extract_pdf_text(file_path)
-            elif file_extension == "txt":
+            if file_ext == "txt":
                 return self._extract_txt_text(file_path)
-            elif file_extension == "docx":
+            if file_ext == "docx":
                 return self._extract_docx_text(file_path)
+
+            raise UnsupportedFormatError(f"Unsupported file format:{file_ext}")
+
         except Exception as e:
             raise CorruptedFileError(f"Failed to process file {file_path}: {str(e)}") from e
 
@@ -54,11 +63,11 @@ class DocumentProcessor:
     def _extract_pdf_text(self, file_path):
         """Extract text from PDF using pdfplumber"""
         try:
-            text = ""
+            pdf_text = ""
             with pdfplumber.open(file_path) as pdf:
                 for page in pdf.pages:
-                    text += page.extract_text() or ''
-            return text
+                    pdf_text += page.extract_text() or ''
+            return pdf_text
         except Exception as e:
             raise CorruptedFileError(f"PDF processing error: {str(e)}") from e
 
@@ -86,9 +95,9 @@ if __name__ == "__main__":
     files = os.listdir(processor.base_dir)
 
     for file in files:
-        file_path = f"{processor.base_dir}/{file}"
+        FILE_PATH = f"{processor.base_dir}/{file}"
         try:
-            text = processor.process_file(file_path)
+            text = processor.process_file(FILE_PATH)
             print(f"Processed {file} successfully. Text length: {len(text)} characters.")
         except UnsupportedFormatError as e:
             print(f"Unsupported format: {e}")

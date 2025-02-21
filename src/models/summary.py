@@ -1,10 +1,23 @@
+"""
+Module for generating summaries from input text using Large Language Models.
+"""
+
 import asyncio
+import textwrap
+
 from langchain.schema import HumanMessage
 from src.models.model_manager import ModelManager
-import textwrap
 
 
 class SummaryGenerator:
+    """
+    Generates summaries from input text using a language model.
+
+    Supports generating summaries in various formats:
+    - brief: A concise summary (2-3 sentences)
+    - detailed: A detailed summary with key points
+    - bullet: A bullet point summary
+    """
     def __init__(self, model_manager: ModelManager, chunk_size: int = 4000, timeout: int = 30):
         """Initialize SummaryGenerator with ModelManager and configuration."""
         self.model_manager = model_manager
@@ -58,7 +71,10 @@ class SummaryGenerator:
             )
             return response.content
         except asyncio.TimeoutError:
-            return f"[Partial Result - Timeout after {self.timeout}s]: {textwrap.shorten(chunk, width=100, placeholder='...')}"
+            return (
+                f"[Partial Result - Timeout after {self.timeout}s]: "
+                f"{textwrap.shorten(chunk, width=100, placeholder='...')}"
+            )
 
     async def _summarize_chunks(self, chunks: list[str], summary_type: str) -> list[str]:
         """Process all chunks concurrently."""
@@ -68,7 +84,11 @@ class SummaryGenerator:
     def generate_summary(self, text: str, summary_type: str = "brief") -> str:
         """Generate summary of the input text with specified type."""
         if summary_type not in self.summary_types:
-            raise ValueError(f"Invalid summary type. Choose from: {list(self.summary_types.keys())}")
+            raise ValueError(
+                f"Invalid summary type. "
+                f"Choose from: "
+                f"{list(self.summary_types.keys())}"
+            )
 
         # Chunk the text
         chunks = self._chunk_text(text)
@@ -103,7 +123,7 @@ if __name__ == "__main__":
     summarizer = SummaryGenerator(model_mgr)
 
     # Sample text (replace with your own)
-    sample_text = """
+    SAMPLE_TEXT = """
     Artificial Intelligence (AI) is transforming various industries. 
     It enables machines to perform tasks that typically require human intelligence.
 
@@ -117,27 +137,27 @@ if __name__ == "__main__":
     # Generate different types of summaries
     try:
         # Brief summary
-        brief = summarizer.generate_summary(sample_text, "brief")
+        brief = summarizer.generate_summary(SAMPLE_TEXT, "brief")
         print("Brief Summary:")
         print(brief)
         print("\n")
 
         # Detailed summary
-        detailed = summarizer.generate_summary(sample_text, "detailed")
+        detailed = summarizer.generate_summary(SAMPLE_TEXT, "detailed")
         print("Detailed Summary:")
         print(detailed)
         print("\n")
 
         # Bullet point summary
-        bullet = summarizer.generate_summary(sample_text, "bullet")
+        bullet = summarizer.generate_summary(SAMPLE_TEXT, "bullet")
         print("Bullet Point Summary:")
         print(bullet)
 
         # Switch model and try again
         summarizer.set_model("cohere")
         print("\nSwitching to Cohere model:")
-        brief_cohere = summarizer.generate_summary(sample_text, "brief")
+        brief_cohere = summarizer.generate_summary(SAMPLE_TEXT, "brief")
         print(brief_cohere)
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=W0718
         print(f"Error: {str(e)}")
