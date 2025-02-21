@@ -5,4 +5,4 @@
 `poetry run python -m src.models.openai_config`
 
 ## Running tests
-`poetry run pytest`
+`poetry run pytest -v`
